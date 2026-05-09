@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:context7.com)",
+      "WebFetch(domain:www.npmjs.com)",
+      "WebFetch(domain:github.com)",
+      "PowerShell(claude mcp add context7 -e CONTEXT7_API_KEY=ctx7sk-d1575faa-fadd-4d37-978a-9739b87ac217 -- npx -y @upstash/context7-mcp@latest)",
+      "PowerShell(ls \"$env:APPDATA\\\\Claude\\\\\" -ErrorAction SilentlyContinue; ls \"$env:USERPROFILE\\\\.claude\\\\\" -ErrorAction SilentlyContinue)",
+      "PowerShell(ls \"$env:APPDATA\\\\Claude\\\\\" -ErrorAction SilentlyContinue; ls \"$env:USERPROFILE\\\\.claude\\\\settings.json\" -ErrorAction SilentlyContinue)",
+      "PowerShell(node --version)",
+      "PowerShell(npx --version)",
+      "PowerShell(Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force)",
+      "PowerShell(Get-Content \"$env:USERPROFILE\\\\.claude\\\\settings.json\" -ErrorAction SilentlyContinue | Out-String)",
+      "PowerShell(Get-ChildItem \"$env:USERPROFILE\\\\.claude\\\\\" -ErrorAction SilentlyContinue | Select-Object Name, LastWriteTime)",
+      "PowerShell(Get-ChildItem \"$env:USERPROFILE\\\\.claude\\\\\" -Force -ErrorAction SilentlyContinue | Select-Object Name, LastWriteTime)",
+      "PowerShell(npx --yes @upstash/context7-mcp@latest --version 2>&1)",
+      "WebFetch(domain:ui.shadcn.com)",
+      "WebFetch(domain:playwright.dev)",
+      "PowerShell(npx --yes @playwright/mcp@latest --version 2>&1)",
+      "PowerShell(npx --yes shadcn@latest --version 2>&1)",
+      "PowerShell(claude mcp list 2>&1)",
+      "PowerShell($env:PATH -split \";\" | ForEach-Object { if \\(Test-Path \"$_\\\\claude.cmd\" -ErrorAction SilentlyContinue\\) { \"$_\\\\claude.cmd\" } elseif \\(Test-Path \"$_\\\\claude.exe\" -ErrorAction SilentlyContinue\\) { \"$_\\\\claude.exe\" } })",
+      "PowerShell(cmd /c \"dir C:\\\\Users\\\\Admin\\\\.claude\\\\ /a\")",
+      "PowerShell(cmd /c \"dir C:\\\\Users\\\\Admin\\\\.claude\\\\sessions\\\\ /a\")",
+      "PowerShell($job = Start-Job { npx @playwright/mcp@latest --version 2>&1 }; Start-Sleep -Seconds 10; Receive-Job $job; Remove-Job $job -Force)",
+      "PowerShell($job = Start-Job { echo '{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2024-11-05\",\"capabilities\":{},\"clientInfo\":{\"name\":\"test\",\"version\":\"1.0\"}}}' | npx --yes @upstash/context7-mcp@latest 2>&1 }; Start-Sleep -Seconds 8; Receive-Job $job; Stop-Job $job; Remove-Job $job -Force)",
+      "PowerShell($vsCodeSettingsPath = \"$env:APPDATA\\\\Code\\\\User\\\\settings.json\"; if \\(Test-Path $vsCodeSettingsPath\\) { Get-Content $vsCodeSettingsPath | Select-String -Pattern \"claude|mcp|anthropic\" -CaseSensitive:$false } else { \"ไม่พบไฟล์ VS Code settings\" })",
+      "PowerShell($vsCodeSettingsPath = \"$env:APPDATA\\\\Code\\\\User\\\\settings.json\"; if \\(Test-Path $vsCodeSettingsPath\\) { Get-Content $vsCodeSettingsPath | ConvertFrom-Json | Get-Member } else { \"ไม่พบ\" })",
+      "PowerShell(Get-Content \"$env:APPDATA\\\\Code\\\\User\\\\settings.json\" -Raw)",
+      "PowerShell(npx --yes @upstash/context7-mcp@latest --version 2>&1; echo \"EXIT:$LASTEXITCODE\")"
+    ]
+  }
+}
