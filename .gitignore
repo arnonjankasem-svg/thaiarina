@@ -1,0 +1,11 @@
+# Secrets — ห้าม push
+.mcp.json
+.claude/settings.local.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+*.swp
