@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ตั้งการอย่างมีสไตล์ — League of Legends</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --gold: #C89B3C;
+      --gold-light: #F0D27A;
+      --dark: #010A13;
+      --dark-blue: #0A1428;
+      --text-light: #A0B4C8;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--dark);
+      color: #fff;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(1,10,19,0.95);
+      border-bottom: 1px solid rgba(200,155,60,0.3);
+      display: flex;
+      align-items: center;
+      padding: 0 40px;
+      height: 56px;
+      gap: 16px;
+    }
+
+    .nav-back {
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: opacity 0.2s;
+    }
+    .nav-back:hover { opacity: 0.7; }
+    .nav-back::before { content: '‹'; font-size: 20px; line-height: 1; }
+
+    .nav-title {
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      flex: 1;
+      text-align: center;
+    }
+
+    /* ─── HERO BANNER ─── */
+    .page-hero {
+      margin-top: 56px;
+      position: relative;
+      height: 280px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .page-hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 30% 50%, rgba(80,40,160,0.5) 0%, transparent 60%),
+        radial-gradient(ellipse at 70% 50%, rgba(20,60,140,0.4) 0%, transparent 60%),
+        linear-gradient(180deg, #0a0520 0%, #0a1428 60%, #010A13 100%);
+    }
+
+    .page-hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 60%, #010A13 100%);
+    }
+
+    .page-hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+
+    .page-hero-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+
+    .page-hero-title {
+      font-size: clamp(36px, 6vw, 72px);
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 1;
+      background: linear-gradient(180deg, #F0D27A 0%, #C89B3C 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+      filter: drop-shadow(0 0 30px rgba(200,155,60,0.4));
+    }
+
+    .page-hero-sub {
+      font-size: 14px;
+      color: var(--text-light);
+      letter-spacing: 0.05em;
+    }
+
+    /* ─── FILTER BAR ─── */
+    .filter-bar {
+      background: #0a1020;
+      border-bottom: 1px solid rgba(200,155,60,0.15);
+      padding: 16px 40px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .filter-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      margin-right: 4px;
+    }
+
+    .filter-btn {
+      padding: 7px 18px;
+      background: transparent;
+      border: 1px solid rgba(200,155,60,0.3);
+      color: var(--text-light);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      clip-path: polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);
+      transition: all 0.2s;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--gold);
+      color: var(--dark);
+      border-color: var(--gold);
+    }
+
+    .filter-search {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(200,155,60,0.2);
+      padding: 8px 16px;
+    }
+
+    .filter-search input {
+      background: none;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-size: 12px;
+      width: 180px;
+    }
+
+    .filter-search input::placeholder { color: var(--text-light); }
+
+    /* ─── MAIN CONTENT ─── */
+    .main-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 48px 40px 80px;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 40px;
+    }
+
+    /* ─── SIDEBAR ─── */
+    .sidebar {}
+
+    .sidebar-section {
+      margin-bottom: 32px;
+    }
+
+    .sidebar-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(200,155,60,0.2);
+    }
+
+    .champion-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .champion-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .champion-item:hover { border-color: rgba(200,155,60,0.3); background: rgba(200,155,60,0.05); }
+    .champion-item.active { border-color: var(--gold); background: rgba(200,155,60,0.1); }
+
+    .champion-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid rgba(200,155,60,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .champion-info h4 {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .champion-info span {
+      font-size: 10px;
+      color: var(--text-light);
+      letter-spacing: 0.08em;
+    }
+
+    .skin-count {
+      margin-left: auto;
+      font-size: 10px;
+      color: var(--gold);
+      font-weight: 700;
+      background: rgba(200,155,60,0.15);
+      padding: 2px 8px;
+    }
+
+    /* ─── SKIN GRID ─── */
+    .skin-area {}
+
+    .skin-area-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .skin-area-header h2 {
+      font-size: 20px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #fff;
+    }
+
+    .skin-area-header h2 span {
+      color: var(--gold);
+    }
+
+    .skin-sort {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--text-light);
+      letter-spacing: 0.1em;
+    }
+
+    .skin-sort select {
+      background: #0a1020;
+      border: 1px solid rgba(200,155,60,0.3);
+      color: var(--gold);
+      padding: 6px 12px;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .skin-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .skin-card {
+      background: #0a1020;
+      border: 1px solid rgba(200,155,60,0.15);
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skin-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(200,155,60,0.2);
+    }
+
+    .skin-card.owned { border-color: rgba(200,155,60,0.4); }
+    .skin-card.selected { border-color: var(--gold); box-shadow: 0 0 20px rgba(200,155,60,0.4); }
+
+    .skin-img {
+      position: relative;
+      padding-top: 140%;
+      overflow: hidden;
+    }
+
+    .skin-img-bg {
+      position: absolute;
+      inset: 0;
+      transition: transform 0.4s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 64px;
+    }
+
+    .skin-card:hover .skin-img-bg { transform: scale(1.08); }
+
+    .skin-img-bg.s1  { background: linear-gradient(135deg, #1a0a2e, #4a1a6e, #8B3A8B); }
+    .skin-img-bg.s2  { background: linear-gradient(135deg, #0a1a3e, #1a3a8e, #2a5aae); }
+    .skin-img-bg.s3  { background: linear-gradient(135deg, #1a0a0a, #6e1a0a, #ae3a0a); }
+    .skin-img-bg.s4  { background: linear-gradient(135deg, #0a1a0a, #1a4e1a, #2a8e3a); }
+    .skin-img-bg.s5  { background: linear-gradient(135deg, #1a1a0a, #4e4a0a, #8e8a1a); }
+    .skin-img-bg.s6  { background: linear-gradient(135deg, #0a0a1a, #1a1a5a, #2a2a9a); }
+    .skin-img-bg.s7  { background: linear-gradient(135deg, #1a0a1a, #5a0a5a, #9a1a8a); }
+    .skin-img-bg.s8  { background: linear-gradient(135deg, #0a1a1a, #0a4a4a, #0a7a7a); }
+
+    .skin-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 3px 10px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .badge-legendary { background: #C89B3C; color: #000; }
+    .badge-epic      { background: #8B3DBF; color: #fff; }
+    .badge-rare      { background: #1a6aae; color: #fff; }
+    .badge-owned     { background: rgba(0,0,0,0.7); color: var(--gold); border: 1px solid var(--gold); }
+    .badge-new       { background: #2a8e3a; color: #fff; }
+
+    .skin-check {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #000;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .skin-card.selected .skin-check,
+    .skin-card.owned .skin-check { opacity: 1; }
+
+    .skin-info {
+      padding: 14px;
+    }
+
+    .skin-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .skin-champion {
+      font-size: 11px;
+      color: var(--text-light);
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+    }
+
+    .skin-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .skin-price {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .rp-icon {
+      width: 16px;
+      height: 16px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      color: #000;
+      font-weight: 900;
+    }
+
+    .skin-btn {
+      padding: 6px 16px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      clip-path: polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);
+      transition: filter 0.2s;
+    }
+
+    .skin-btn-buy  { background: linear-gradient(180deg, #F0D27A, #C89B3C); color: #000; }
+    .skin-btn-equip { background: rgba(200,155,60,0.15); color: var(--gold); border: 1px solid var(--gold); }
+    .skin-btn-buy:hover, .skin-btn-equip:hover { filter: brightness(1.2); }
+
+    /* ─── PREVIEW MODAL ─── */
+    .preview-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(1,10,19,0.9);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .preview-modal.open { display: flex; }
+
+    .preview-box {
+      background: #0a1428;
+      border: 1px solid var(--gold);
+      width: 90%;
+      max-width: 900px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+      animation: modalIn 0.3s ease;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .preview-left {
+      position: relative;
+      min-height: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 120px;
+    }
+
+    .preview-left-bg {
+      position: absolute;
+      inset: 0;
+    }
+
+    .preview-right {
+      padding: 48px 40px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .preview-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 36px;
+      height: 36px;
+      background: rgba(200,155,60,0.2);
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .preview-badge {
+      display: inline-block;
+      padding: 4px 14px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .preview-name {
+      font-size: 32px;
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 1;
+      background: linear-gradient(180deg,#F0D27A,#C89B3C);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+
+    .preview-champion {
+      font-size: 14px;
+      color: var(--text-light);
+      letter-spacing: 0.1em;
+      margin-bottom: 24px;
+    }
+
+    .preview-divider {
+      width: 40px;
+      height: 2px;
+      background: var(--gold);
+      margin-bottom: 24px;
+    }
+
+    .preview-desc {
+      font-size: 13px;
+      color: var(--text-light);
+      line-height: 1.8;
+      margin-bottom: 32px;
+      flex: 1;
+    }
+
+    .preview-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+
+    .preview-feature {
+      padding: 5px 14px;
+      border: 1px solid rgba(200,155,60,0.3);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .preview-price-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 24px;
+      border-top: 1px solid rgba(200,155,60,0.2);
+    }
+
+    .preview-price {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .preview-price .rp-icon {
+      width: 24px;
+      height: 24px;
+      font-size: 12px;
+    }
+
+    .btn-gold {
+      display: inline-block;
+      background: linear-gradient(180deg,#F0D27A,#C89B3C);
+      color: #010A13;
+      border: none;
+      padding: 14px 40px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      clip-path: polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%);
+      transition: filter 0.2s;
+    }
+    .btn-gold:hover { filter: brightness(1.2); }
+
+    /* ─── PAGINATION ─── */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 48px;
+    }
+
+    .page-btn {
+      width: 36px;
+      height: 36px;
+      background: transparent;
+      border: 1px solid rgba(200,155,60,0.3);
+      color: var(--text-light);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .page-btn:hover, .page-btn.active {
+      background: var(--gold);
+      color: #000;
+      border-color: var(--gold);
+    }
+
+    /* ─── FADE IN ─── */
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.5s, transform 0.5s; }
+    .fade-in.visible { opacity: 1; transform: none; }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="index.html" class="nav-back">หน้าหลัก</a>
+  <div class="nav-title">ตั้งการอย่างมีสไตล์</div>
+</nav>
+
+<!-- HERO -->
+<div class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-content">
+    <div class="page-hero-label">คอลเลกชันสกิน</div>
+    <h1 class="page-hero-title">เลือกสไตล์ของคุณ</h1>
+    <p class="page-hero-sub">ปรับแต่งแชมเปี้ยนให้สะท้อนความเป็นตัวตนของคุณ</p>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <span class="filter-label">หมวดหมู่:</span>
+  <button class="filter-btn active" onclick="setFilter(this)">ทั้งหมด</button>
+  <button class="filter-btn" onclick="setFilter(this)">Legendary</button>
+  <button class="filter-btn" onclick="setFilter(this)">Epic</button>
+  <button class="filter-btn" onclick="setFilter(this)">Rare</button>
+  <button class="filter-btn" onclick="setFilter(this)">ที่ฉันมี</button>
+  <div class="filter-search">
+    <span style="color:var(--text-light);font-size:14px;">🔍</span>
+    <input type="text" placeholder="ค้นหาสกิน..." oninput="searchSkins(this.value)" />
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar fade-in">
+    <div class="sidebar-section">
+      <div class="sidebar-title">แชมเปี้ยน</div>
+      <div class="champion-list">
+        <div class="champion-item active" onclick="selectChampion(this)">
+          <div class="champion-avatar" style="background:linear-gradient(135deg,#1a0a2e,#8B3A8B)">🥷</div>
+          <div class="champion-info">
+            <h4>Akali</h4>
+            <span>นักฆ่า</span>
+          </div>
+          <div class="skin-count">8</div>
+        </div>
+        <div class="champion-item" onclick="selectChampion(this)">
+          <div class="champion-avatar" style="background:linear-gradient(135deg,#0a1a3e,#2a5aae)">⚡</div>
+          <div class="champion-info">
+            <h4>Jinx</h4>
+            <span>มือปืน</span>
+          </div>
+          <div class="skin-count">12</div>
+        </div>
+        <div class="champion-item" onclick="selectChampion(this)">
+          <div class="champion-avatar" style="background:linear-gradient(135deg,#1a0a0a,#ae3a0a)">🔥</div>
+          <div class="champion-info">
+            <h4>Lux</h4>
+            <span>นักเวทย์</span>
+          </div>
+          <div class="skin-count">15</div>
+        </div>
+        <div class="champion-item" onclick="selectChampion(this)">
+          <div class="champion-avatar" style="background:linear-gradient(135deg,#0a1a0a,#2a8e3a)">🌿</div>
+          <div class="champion-info">
+            <h4>Thresh</h4>
+            <span>ผู้สนับสนุน</span>
+          </div>
+          <div class="skin-count">10</div>
+        </div>
+        <div class="champion-item" onclick="selectChampion(this)">
+          <div class="champion-avatar" style="background:linear-gradient(135deg,#1a1a0a,#8e8a1a)">⚔️</div>
+          <div class="champion-info">
+            <h4>Yasuo</h4>
+            <span>นักสู้</span>
+          </div>
+          <div class="skin-count">9</div>
+        </div>
+        <div class="champion-item" onclick="selectChampion(this)">
+          <div class="champion-avatar" style="background:linear-gradient(135deg,#0a0a1a,#2a2a9a)">🌙</div>
+          <div class="champion-info">
+            <h4>Zed</h4>
+            <span>นักฆ่า</span>
+          </div>
+          <div class="skin-count">7</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">RP ของฉัน</div>
+      <div style="display:flex;align-items:center;gap:10px;padding:12px;background:#0a1020;border:1px solid rgba(200,155,60,0.2);">
+        <div class="rp-icon" style="width:28px;height:28px;font-size:12px;">RP</div>
+        <div>
+          <div style="font-size:20px;font-weight:900;color:var(--gold);">3,250</div>
+          <div style="font-size:10px;color:var(--text-light);letter-spacing:0.1em;">RIOT POINTS</div>
+        </div>
+        <button class="btn-gold" style="margin-left:auto;padding:8px 16px;font-size:10px;">เติม</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- SKIN GRID -->
+  <div class="skin-area fade-in">
+    <div class="skin-area-header">
+      <h2>สกินของ <span>Akali</span></h2>
+      <div class="skin-sort">
+        <span>เรียงโดย:</span>
+        <select>
+          <option>ใหม่ที่สุด</option>
+          <option>ราคา: สูง-ต่ำ</option>
+          <option>ราคา: ต่ำ-สูง</option>
+          <option>ชื่อ A-Z</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="skin-grid" id="skinGrid">
+
+      <div class="skin-card owned fade-in" onclick="openPreview('K/DA Akali','Akali','legendary','3250','s1','🥷','เปล่งประกายสไตล์ K-POP สุดไอดอล พร้อม VFX พิเศษ เอฟเฟกต์เสียงใหม่ และแอนิเมชันสุดพิเศษที่ไม่เหมือนใคร')">
+        <div class="skin-img">
+          <div class="skin-img-bg s1">🎤</div>
+          <div class="skin-badge badge-legendary">Legendary</div>
+          <div class="skin-check">✓</div>
+        </div>
+        <div class="skin-info">
+          <div class="skin-name">K/DA Akali</div>
+          <div class="skin-champion">Akali · Legendary</div>
+          <div class="skin-footer">
+            <div class="skin-price"><div class="rp-icon">RP</div>3,250</div>
+            <button class="skin-btn skin-btn-equip">สวมใส่</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="skin-card fade-in" onclick="openPreview('True Damage Akali','Akali','epic','1820','s2','🥷','สไตล์ฮิปฮอปสตรีทสุดคูล พร้อมชุดและอาวุธที่ออกแบบมาใหม่ทั้งหมด เหมาะกับสายดาร์ก')">
+        <div class="skin-img">
+          <div class="skin-img-bg s2">🎵</div>
+          <div class="skin-badge badge-epic">Epic</div>
+          <div class="skin-check">✓</div>
+        </div>
+        <div class="skin-info">
+          <div class="skin-name">True Damage Akali</div>
+          <div class="skin-champion">Akali · Epic</div>
+          <div class="skin-footer">
+            <div class="skin-price"><div class="rp-icon">RP</div>1,820</div>
+            <button class="skin-btn skin-btn-buy">ซื้อ</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="skin-card fade-in" onclick="openPreview('Crimson Akali','Akali','rare','975','s3','🥷','ชุดสีแดงเข้มสุดอันตราย สไตล์นักฆ่าจากตะวันออก ด้วยดีไซน์ที่ให้ความรู้สึกดุดันและทรงพลัง')">
+        <div class="skin-img">
+          <div class="skin-img-bg s3">🗡️</div>
+          <div class="skin-badge badge-rare">Rare</div>
+          <div class="skin-check">✓</div>
+        </div>
+        <div class="skin-info">
+          <div class="skin-name">Crimson Akali</div>
+          <div class="skin-champion">Akali · Rare</div>
+          <div class="skin-footer">
+            <div class="skin-price"><div class="rp-icon">RP</div>975</div>
+            <button class="skin-btn skin-btn-buy">ซื้อ</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="skin-card fade-in" style="border-color:rgba(200,155,60,0.4)" onclick="openPreview('Silverfang Akali','Akali','epic','1350','s4','🥷','สไตล์นักรบป่าลึกลับ ผสมผสานความงามของธรรมชาติกับพลังมืดที่ซ่อนอยู่ภายใน')">
+        <div class="skin-img">
+          <div class="skin-img-bg s4">🌙</div>
+          <div class="skin-badge badge-new">New</div>
+          <div class="skin-check">✓</div>
+        </div>
+        <div class="skin-info">
+          <div class="skin-name">Silverfang Akali</div>
+          <div class="skin-champion">Akali · Epic</div>
+          <div class="skin-footer">
+            <div class="skin-price"><div class="rp-icon">RP</div>1,350</div>
+            <button class="skin-btn skin-btn-buy">ซื้อ</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="skin-card owned fade-in" onclick="openPreview('All Star Akali','Akali','rare','975','s5','🥷','สกินสุดน่ารักในชุดนักกีฬา สไตล์ All-Star ที่ทำให้ Akali ดูเป็นมิตรกว่าเดิม')">
+        <div class="skin-img">
+          <div class="skin-img-bg s5">⭐</div>
+          <div class="skin-badge badge-owned">ที่ฉันมี</div>
+          <div class="skin-check">✓</div>
+        </div>
+        <div class="skin-info">
+          <div class="skin-name">All Star Akali</div>
+          <div class="skin-champion">Akali · Rare</div>
+          <div class="skin-footer">
+            <div class="skin-price"><div class="rp-icon">RP</div>975</div>
+            <button class="skin-btn skin-btn-equip">สวมใส่</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="skin-card fade-in" onclick="openPreview('Nurse Akali','Akali','rare','975','s6','🥷','สกินสุดฮาในชุดพยาบาล ที่ทำให้แม้แต่นักฆ่าก็ยังดูน่ารัก พร้อมความตลกร้ายแฝงอยู่')">
+        <div class="skin-img">
+          <div class="skin-img-bg s6">💉</div>
+          <div class="skin-badge badge-rare">Rare</div>
+          <div class="skin-check">✓</div>
+        </div>
+        <div class="skin-info">
+          <div class="skin-name">Nurse Akali</div>
+          <div class="skin-champion">Akali · Rare</div>
+          <div class="skin-footer">
+            <div class="skin-price"><div class="rp-icon">RP</div>975</div>
+            <button class="skin-btn skin-btn-buy">ซื้อ</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="skin-card fade-in" onclick="openPreview('Headhunter Akali','Akali','epic','1350','s7','🥷','ชุดนักล่าหัวสุดไฮเทค ด้วยเทคโนโลยีล้ำสมัยและอาวุธพลาสมาที่โดดเด่นไม่เหมือนใคร')">
+        <div class="skin-img">
+          <div class="skin-img-bg s7">🎯</div>
+          <div class="skin-badge badge-epic">Epic</div>
+          <div class="skin-check">✓</div>
+        </div>
+        <div class="skin-info">
+          <div class="skin-name">Headhunter Akali</div>
+          <div class="skin-champion">Akali · Epic</div>
+          <div class="skin-footer">
+            <div class="skin-price"><div class="rp-icon">RP</div>1,350</div>
+            <button class="skin-btn skin-btn-buy">ซื้อ</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="skin-card fade-in" onclick="openPreview('Infernal Akali','Akali','epic','1350','s8','🥷','อาคาลีแห่งเปลวไฟนรก ปกคลุมด้วยเปลวเพลิงและพลังทำลายล้างที่ไม่มีใครหยุดได้')">
+        <div class="skin-img">
+          <div class="skin-img-bg s8">🔥</div>
+          <div class="skin-badge badge-epic">Epic</div>
+          <div class="skin-check">✓</div>
+        </div>
+        <div class="skin-info">
+          <div class="skin-name">Infernal Akali</div>
+          <div class="skin-champion">Akali · Epic</div>
+          <div class="skin-footer">
+            <div class="skin-price"><div class="rp-icon">RP</div>1,350</div>
+            <button class="skin-btn skin-btn-buy">ซื้อ</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="pagination">
+      <button class="page-btn active">1</button>
+      <button class="page-btn">2</button>
+      <button class="page-btn">3</button>
+      <button class="page-btn">›</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- PREVIEW MODAL -->
+<div class="preview-modal" id="previewModal" onclick="closePreview(event)">
+  <div class="preview-box">
+    <div class="preview-left" id="previewLeft">
+      <div class="preview-left-bg" id="previewBg"></div>
+      <span id="previewEmoji" style="position:relative;z-index:2;filter:drop-shadow(0 0 30px rgba(200,155,60,0.6))"></span>
+    </div>
+    <div class="preview-right">
+      <button class="preview-close" onclick="document.getElementById('previewModal').classList.remove('open')">✕</button>
+      <div class="preview-badge badge-legendary" id="previewBadge"></div>
+      <div class="preview-name" id="previewName"></div>
+      <div class="preview-champion" id="previewChampion"></div>
+      <div class="preview-divider"></div>
+      <div class="preview-desc" id="previewDesc"></div>
+      <div class="preview-features">
+        <div class="preview-feature">VFX ใหม่</div>
+        <div class="preview-feature">เสียงใหม่</div>
+        <div class="preview-feature">แอนิเมชันใหม่</div>
+        <div class="preview-feature">โมเดลใหม่</div>
+      </div>
+      <div class="preview-price-row">
+        <div class="preview-price">
+          <div class="rp-icon" style="width:24px;height:24px;font-size:12px;">RP</div>
+          <span id="previewPrice"></span>
+        </div>
+        <button class="btn-gold">ซื้อเลย</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function setFilter(btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  function selectChampion(el) {
+    document.querySelectorAll('.champion-item').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+    const name = el.querySelector('h4').textContent;
+    document.querySelector('.skin-area-header h2').innerHTML = `สกินของ <span>${name}</span>`;
+  }
+
+  function searchSkins(val) {
+    document.querySelectorAll('.skin-card').forEach(card => {
+      const name = card.querySelector('.skin-name').textContent.toLowerCase();
+      card.style.display = name.includes(val.toLowerCase()) ? '' : 'none';
+    });
+  }
+
+  const bgMap = { s1:'linear-gradient(135deg,#1a0a2e,#4a1a6e,#8B3A8B)', s2:'linear-gradient(135deg,#0a1a3e,#1a3a8e,#2a5aae)', s3:'linear-gradient(135deg,#1a0a0a,#6e1a0a,#ae3a0a)', s4:'linear-gradient(135deg,#0a1a0a,#1a4e1a,#2a8e3a)', s5:'linear-gradient(135deg,#1a1a0a,#4e4a0a,#8e8a1a)', s6:'linear-gradient(135deg,#0a0a1a,#1a1a5a,#2a2a9a)', s7:'linear-gradient(135deg,#1a0a1a,#5a0a5a,#9a1a8a)', s8:'linear-gradient(135deg,#0a1a1a,#0a4a4a,#0a7a7a)' };
+  const badgeMap = { legendary:'badge-legendary', epic:'badge-epic', rare:'badge-rare' };
+
+  function openPreview(name, champion, tier, price, bgClass, emoji, desc) {
+    document.getElementById('previewName').textContent = name;
+    document.getElementById('previewChampion').textContent = champion + ' · ' + tier.charAt(0).toUpperCase() + tier.slice(1);
+    document.getElementById('previewPrice').textContent = price;
+    document.getElementById('previewDesc').textContent = desc;
+    document.getElementById('previewEmoji').textContent = emoji;
+    document.getElementById('previewBg').style.background = bgMap[bgClass] || bgMap.s1;
+    const badge = document.getElementById('previewBadge');
+    badge.className = 'preview-badge ' + (badgeMap[tier] || 'badge-rare');
+    badge.textContent = tier.charAt(0).toUpperCase() + tier.slice(1);
+    document.getElementById('previewModal').classList.add('open');
+  }
+
+  function closePreview(e) {
+    if (e.target === document.getElementById('previewModal')) {
+      document.getElementById('previewModal').classList.remove('open');
+    }
+  }
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>
